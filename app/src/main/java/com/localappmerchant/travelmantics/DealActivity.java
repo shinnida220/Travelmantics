@@ -28,8 +28,6 @@ import com.localappmerchant.travelmantics.models.TravelDeal;
 import com.localappmerchant.travelmantics.utils.db.FirebaseUtil;
 import com.squareup.picasso.Picasso;
 
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
-
 public class DealActivity extends AppCompatActivity {
 
     public static final int PICTURE_RESULT = 42;

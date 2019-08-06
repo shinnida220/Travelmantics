@@ -56,6 +56,7 @@ public class FirebaseUtil {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     if (firebaseAuth.getCurrentUser() == null){
+                        FirebaseUtil.isAdmin = false;
                         FirebaseUtil.signIn();
                     }
                     else{
@@ -82,7 +83,12 @@ public class FirebaseUtil {
     }
 
     private static void checkAdmin(String uid){
+
         FirebaseUtil.isAdmin = false;
+
+        // Need to call this to first to reset the menu, so the menu is first reset..
+        mActivity.showMenu();
+
         DatabaseReference ref = mFirebaseDatabase.getReference().child("administrators").child(uid);
         ChildEventListener listener = new ChildEventListener() {
             @Override

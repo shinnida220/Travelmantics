@@ -37,10 +37,24 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
     }
 
+    // As oncreateOption is not being not called again, its better to set this up...
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        setupMenu(menu);
+        return true;
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.list_activity_menu, menu);
 
+        // Show insert menu based on role.
+        setupMenu(menu);
+        return true;
+    }
+
+    private void setupMenu(Menu menu){
         // Show insert menu based on role.
         MenuItem insertMenu = menu.findItem(R.id.insert_menu);
         if( FirebaseUtil.isAdmin ){
@@ -49,8 +63,6 @@ public class ListActivity extends AppCompatActivity {
         else{
             insertMenu.setVisible(false);
         }
-
-        return true;
     }
 
     @Override

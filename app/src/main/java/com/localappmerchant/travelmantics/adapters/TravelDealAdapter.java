@@ -1,10 +1,7 @@
 package com.localappmerchant.travelmantics.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +79,7 @@ public class TravelDealAdapter extends RecyclerView.Adapter<TravelDealAdapter.Tr
     @Override
     public TravelDealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        View itemView = LayoutInflater.from(context).inflate(R.layout.rv_deal_item, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.deal_single, parent, false);
         return new TravelDealViewHolder(itemView);
     }
 
@@ -108,7 +105,7 @@ public class TravelDealAdapter extends RecyclerView.Adapter<TravelDealAdapter.Tr
         public TravelDealViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.deal_tv_title);
-            tvDesc = itemView.findViewById(R.id.deal_tv_desc);
+            tvDesc = itemView.findViewById(R.id.deal_tv_description);
             tvPrice = itemView.findViewById(R.id.deal_tv_price);
             imageDeal = itemView.findViewById(R.id.imageDeal);
             itemView.setOnClickListener(this);
@@ -117,7 +114,7 @@ public class TravelDealAdapter extends RecyclerView.Adapter<TravelDealAdapter.Tr
         public void bind(TravelDeal deal){
             tvTitle.setText(deal.getTitle());
             tvDesc.setText(deal.getDescription());
-            tvPrice.setText(deal.getPrice());
+            tvPrice.setText("$" + deal.getPrice());
             showImage(deal.getImageUrl(), imageDeal);
         }
 
