@@ -43,6 +43,8 @@ public class TravelDealAdapter extends RecyclerView.Adapter<TravelDealAdapter.Tr
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 TravelDeal deal = dataSnapshot.getValue(TravelDeal.class);
                 Log.i("TravelDealAdapter", deal.getTitle());
+
+                // When a new child is added, we listen and then get the id and use as the deal's ID
                 deal.setId(dataSnapshot.getKey());
                 deals.add(deal);
 
@@ -132,7 +134,8 @@ public class TravelDealAdapter extends RecyclerView.Adapter<TravelDealAdapter.Tr
         private void showImage(String url, ImageView imageView){
             if (url != null && url.isEmpty() == false) {
                 Picasso.get()
-                        .load(url).resize(180, 180)
+                        .load(url).
+                        resize(480, 180)
                         .centerCrop()
                         .into(imageView);
             }

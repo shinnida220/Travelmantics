@@ -1,5 +1,6 @@
 package com.localappmerchant.travelmantics;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -99,14 +101,10 @@ public class DealActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.save_menu:
                 saveDeal();
-                Toast.makeText(this, "Deal saved!", Toast.LENGTH_LONG).show();
-                clean();
-                backToList();
                 return true;
             case R.id.delete_menu:
                 deleteDeal();
-                Toast.makeText(this, "Deal deleted!", Toast.LENGTH_LONG).show();
-                backToList();
+
                 return true;
             default:
                  return super.onOptionsItemSelected(item);
@@ -126,36 +124,65 @@ public class DealActivity extends AppCompatActivity {
         deal.setDescription(txtDescription.getText().toString());
         deal.setPrice(txtPrice.getText().toString());
 
+        if (deal.getTitle().isEmpty() || deal.getPrice().isEmpty() || deal.getDescription().isEmpty()){
+            Toast.makeText(this, "Please ensure all fields are filled correctly before saving the deal.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        else if(deal.getImageUrl().isEmpty()){
+            Toast.makeText(this, "Please add an image - preferrably a landscape image before saving the deal.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if (deal.getId() == null) {
             mDatabaseReference.push().setValue(deal);
         }
         else{
             mDatabaseReference.child(deal.getId()).setValue(deal);
         }
+
+        Toast.makeText(this, "Great! Deal saved.", Toast.LENGTH_LONG).show();
+        clean();
+        backToList();
     }
 
     private void deleteDeal(){
-        if (deal == null){
+        if (deal.getId() == null){
             Toast.makeText(this, "Please save the deal before deleting.", Toast.LENGTH_LONG).show();
             return;
         }
-        mDatabaseReference.child(deal.getId()).removeValue();
-        Log.d("DELETE IMAGE", deal.getImageName());
 
-        if (deal.getImageName() != null && deal.getImageName().isEmpty() == false){
-            StorageReference ref = FirebaseUtil.mStorage.getReference().child(deal.getImageName());
-            ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d("DELETE IMAGE","Image delete successful - ");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("DELETE IMAGE","Image delete failed - "+e.getMessage());
-                }
-            });
-        }
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Deal: ("+ deal.getTitle() + ")")
+                .setMessage("Are you sure you want to delete this deal?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        mDatabaseReference.child(deal.getId()).removeValue();
+                        // Log.d("DELETE IMAGE", deal.getImageName());
+
+                        if (deal.getImageName() != null && deal.getImageName().isEmpty() == false){
+                            StorageReference ref = FirebaseUtil.mStorage.getReference().child(deal.getImageName());
+                            ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    //Log.d("DELETE IMAGE","Image delete successful - ");
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    //Log.d("DELETE IMAGE","Image delete failed - "+e.getMessage());
+                                }
+                            });
+                        }
+
+                        Toast.makeText(DealActivity.this, "Deal deleted!", Toast.LENGTH_LONG).show();
+                        backToList();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
     }
 
     private void backToList(){

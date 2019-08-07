@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.localappmerchant.travelmantics.ListActivity;
+import com.localappmerchant.travelmantics.R;
 import com.localappmerchant.travelmantics.models.TravelDeal;
 
 import java.util.ArrayList;
@@ -134,6 +135,10 @@ public class FirebaseUtil {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        // Use our custom style that has a beautiful background..
+                        //.setTheme(R.style.WrapperStyle)
+                        //.setLogo(R.drawable.summer_beach)
+
                         .build(),
                 RC_SIGN_IN);
     }

@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--
+    <style name="WrapperStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@drawable/summer_beach</item>
+    </style>
+    -->
+
 </resources>
